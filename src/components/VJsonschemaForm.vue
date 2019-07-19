@@ -26,8 +26,10 @@ import VJsonschemaForm from "@koumoul/vuetify-jsonschema-form";
 import "@koumoul/vuetify-jsonschema-form/dist/main.css";
 import { Sketch } from "vue-color";
 import PolicyCard from "./PolicyCard";
-
-Vue.use(Vuetify);
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
+Vue.use(Vuetify,{
+  iconfont: 'mdi'
+});
 Vue.use(VueAxios, axios);
 
 Vue.component("swatches", Swatches);

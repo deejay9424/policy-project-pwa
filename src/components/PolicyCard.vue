@@ -5,7 +5,7 @@
         <v-layout row wrap>
           <v-flex xs12 md6 lg4 v-for="policy in data" :key="policy._id">
             <!-- <a :href="'/details?id=' + policy._id"> -->
-            <v-card dark class="card" :to="{name:'details',params:{id:policy._id}}">
+            <v-card class="card" :to="{name:'details',params:{id:policy._id}}">
               <v-card-title :primary-title="true">{{policy.name}}</v-card-title>
               <div class="yellow-line"></div>
               <v-card-text>{{policy.purpose}}</v-card-text>

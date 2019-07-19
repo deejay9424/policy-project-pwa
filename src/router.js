@@ -31,6 +31,11 @@ export default new Router({
       path: '/details/:id',
       name: 'details',
       component: () => import(/* webpackChunkName: "table" */ './views/Details.vue')
+    },
+    {
+      path: '/draggable-list',
+      name: 'draggable-list',
+      component: () => import(/* webpackChunkName: "table" */ './views/DraggableList.vue')
     }
   ]
 })

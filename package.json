@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "deploy": "firebase deploy --only hosting"
   },
   "dependencies": {
     "@koumoul/vuetify-jsonschema-form": "^0.27.1",
@@ -14,6 +15,7 @@
     "vue": "^2.6.10",
     "vue-axios": "^2.1.4",
     "vue-color": "^2.7.0",
+    "vue-nestable": "^2.4.3",
     "vue-router": "^3.0.3",
     "vue-swatches": "^1.0.3",
     "vuedraggable": "^2.23.0",
@@ -21,9 +23,11 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@mdi/font": "^3.8.95",
     "@vue/cli-plugin-babel": "^3.9.0",
     "@vue/cli-plugin-pwa": "^3.9.0",
     "@vue/cli-service": "^3.9.0",
+    "material-design-icons-iconfont": "^5.0.1",
     "vue-template-compiler": "^2.6.10"
   }
 }
