@@ -21,15 +21,43 @@
                 <v-flex xs12 sm6 md4>
                   <v-text-field v-model="editedItem.name" label="Policy name"></v-text-field>
                 </v-flex>
+                  <!-- Effective date picker Dialog -->
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.effectiveDate" label="Effective Date"></v-text-field>
+                  <v-dialog ref="dialog1" v-model="modal" 
+                   persistent lazy full-width width="290px">
+                    <template v-slot:activator="{ on }">
+                      <v-text-field v-model="editedItem.effectiveDate" label="Effective Date" prepend-icon="event"
+                       readonly v-on="on"></v-text-field>
+                    </template>
+                    <v-date-picker v-model="editedItem.effectiveDate" scrollable>
+                      <v-spacer></v-spacer>
+                      <v-btn flat color="primary" @click="modal = false">Cancel</v-btn>
+                      <v-btn flat color="primary" @click="$refs.dialog1.save(editedItem.effectiveDate)">OK</v-btn>
+                    </v-date-picker>
+                  </v-dialog>
                 </v-flex>
+
+                <!-- Review date picker Dialog -->
                 <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.reviewDate" label="Review Date"></v-text-field>
+                  <v-dialog ref="dialog2" v-model="modal2" 
+                   persistent lazy full-width width="290px">
+                    <template v-slot:activator="{ on }">
+                      <v-text-field v-model="editedItem.reviewDate" label="Review Date" prepend-icon="event"
+                       readonly v-on="on"></v-text-field>
+                    </template>
+                    <v-date-picker v-model="editedItem.reviewDate" scrollable>
+                      <v-spacer></v-spacer>
+                      <v-btn flat color="primary" @click="modal2 = false">Cancel</v-btn>
+                      <v-btn flat color="primary" @click="$refs.dialog2.save(editedItem.reviewDate)">OK</v-btn>
+                    </v-date-picker>
+                  </v-dialog>
                 </v-flex>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field v-model="editedItem.isActive" label="Is Active?(true/false)"></v-text-field>
-                </v-flex>
+              <!-- Is active Drodown   -->
+              <v-flex xs12 sm6 md4>
+                <v-select v-model="editedItem.isActive" :items="activeValues"
+                  menu-props="auto" label="Is Active?(true/false)" single-line></v-select>
+              </v-flex>
+
               </v-layout>
             </v-container>
           </v-card-text>
@@ -122,17 +150,25 @@ var database = Firebase.initializeApp({
   authDomain: "https://policy-project-pwa.firebaseapp.com/",
   databaseURL: "https://policy-project-pwa.firebaseio.com/",
   storageBucket: "storageBucket"
-}).database().ref();
+})
+  .database()
+  .ref();
 
 export default {
   data() {
     return {
+      //Date picker
+      modal: false,
+      modal2:false,
+      //Drodown 
+      activeValues:[true,false],
       // Snack
       snack: false,
       snackColor: "",
       snackText: "",
       // Data Source
-      dataSrc: dataObj,
+      dataSrc: [],
+      index: 0,
       // Table
       max25chars: v => v.length <= 25 || "Input too long!",
       pagination: {},
@@ -172,14 +208,14 @@ export default {
       editedIndex: -1,
       editedItem: {
         name: "",
-        effectiveDate: "",
-        reviewDate: "",
+        effectiveDate: null,
+        reviewDate: null,
         isActive: ""
       },
       defaultItem: {
         name: "",
-        effectiveDate: "",
-        reviewDate: "",
+        effectiveDate: null,
+        reviewDate: null,
         isActive: ""
       }
     };
@@ -193,7 +229,7 @@ export default {
 
   methods: {
     initialize() {
-      this.dataSrc = dataObj;
+      this.dataSrc = [];
     },
     editItem(item) {
       this.editedIndex = this.dataSrc.indexOf(item);
@@ -201,9 +237,10 @@ export default {
       this.dialog = true;
     },
     deleteItem(item) {
-      const index = this.dataSrc.indexOf(item);
+      var ref = this.dataSrc[this.index].ref;
+      ref && ref.remove();
       confirm("Are you sure you want to delete this item?") &&
-        this.dataSrc.splice(index, 1);
+        this.dataSrc.splice(this.index, 1);
     },
     save() {
       this.snack = true;
@@ -228,14 +265,37 @@ export default {
       }, 300);
     },
     saveData() {
+      // IF item exist Update
       if (this.editedIndex > -1) {
+        this.editedItem.ref.update({
+          name: this.editedItem.name,
+          effectiveDate: this.editedItem.effectiveDate,
+          reviewDate: this.editedItem.reviewDate,
+          isActive: this.editedItem.isActive
+        });
         Object.assign(this.dataSrc[this.editedIndex], this.editedItem);
-      } else {
+      }
+      // Else Save
+      else {
+        this.editedItem.ref = database.push(this.editedItem);
         this.dataSrc.push(this.editedItem);
       }
       this.closeDialog();
     },
-    close(){}
+    close() {}
+  },
+  mounted() {
+    database.once("value", dataSrc => {
+      dataSrc.forEach(item => {
+        this.dataSrc.push({
+          ref: item.ref,
+          name: item.child("name").val(),
+          effectiveDate: item.child("effectiveDate").val(),
+          reviewDate: item.child("reviewDate").val(),
+          isActive: item.child("isActive").val()
+        });
+      });
+    });
   }
 };
 </script>
