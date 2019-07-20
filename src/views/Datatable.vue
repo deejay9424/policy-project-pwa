@@ -46,7 +46,14 @@
     <v-data-table :headers="headers" :items="dataSrc">
       <template v-slot:items="props">
         <td>
-          <v-edit-dialog :return-value.sync="props.item.name" lazy @save="save" @cancel="cancel" @open="open" @close="close">
+          <v-edit-dialog
+            :return-value.sync="props.item.name"
+            lazy
+            @save="save"
+            @cancel="cancel"
+            @open="open"
+            @close="close"
+          >
             {{ props.item.name }}
             <template v-slot:input>
               <v-text-field
@@ -64,12 +71,8 @@
         <td>{{ props.item.isActive }}</td>
         <!-- Edit/Delete Icons -->
         <td class="justify-center layout px-0">
-          <v-icon small class="mr-2" @click="editItem(props.item)">
-            edit
-          </v-icon>
-          <v-icon small @click="deleteItem(props.item)">
-            delete
-          </v-icon>
+          <v-icon small class="mr-2" @click="editItem(props.item)">edit</v-icon>
+          <v-icon small @click="deleteItem(props.item)">delete</v-icon>
         </td>
       </template>
       <!-- Header Cells Tooltip -->
@@ -106,12 +109,21 @@ import Swatches from "vue-swatches";
 import "vue-swatches/dist/vue-swatches.min.css";
 import { Sketch } from "vue-color";
 import { dataObj } from "../data";
+import Firebase from "firebase";
+
 Vue.use(Vuetify);
 Vue.use(VueAxios, axios);
 
 Vue.component("swatches", Swatches);
 Vue.component("draggable", Draggable);
 Vue.component("color-picker", Sketch);
+
+var database = Firebase.initializeApp({
+  authDomain: "https://policy-project-pwa.firebaseapp.com/",
+  databaseURL: "https://policy-project-pwa.firebaseio.com/",
+  storageBucket: "storageBucket"
+}).database().ref();
+
 export default {
   data() {
     return {

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
+    "start": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "deploy": "firebase deploy --only hosting"
   },
@@ -11,6 +11,7 @@
     "@koumoul/vuetify-jsonschema-form": "^0.27.1",
     "axios": "^0.19.0",
     "core-js": "^2.6.5",
+    "firebase": "^6.3.1",
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.10",
     "vue-axios": "^2.1.4",

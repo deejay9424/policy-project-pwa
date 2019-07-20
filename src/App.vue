@@ -1,6 +1,7 @@
 <template>
   <v-app id="nav">
     <v-toolbar app>
+      <!-- App Title -->
       <v-toolbar-title class="headline text-uppercase">
         <span class="font-weight-light">Clarity-India</span>
       </v-toolbar-title>
@@ -9,6 +10,7 @@
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn v-for="item in menu" :key="item.icon" :to="item.href" flat>{{ item.title }}</v-btn>
       </v-toolbar-items>
+       <!-- Menu Items  -->
       <v-menu class="hidden-md-and-up">
         <v-toolbar-side-icon slot="activator"></v-toolbar-side-icon>
         <v-list>
@@ -21,6 +23,7 @@
       </v-menu>
     </v-toolbar>
     <div class="mt-10"></div>
+    <!-- Different views -->
     <router-view />
   </v-app>
 </template>
@@ -30,7 +33,9 @@ import Datatable from "./views/Datatable";
 import VJsonschemaForm from "./components/VJsonschemaForm";
 import VueNestable from "vue-nestable";
 import Vue from "vue";
+
 Vue.use(VueNestable);
+
 export default {
   name: "App",
   components: {
@@ -70,6 +75,6 @@ export default {
   color: #42b983;
 }
 .mt-10 {
-  margin-top: 6%;
+  margin-top: 10%;
 }
 </style>
